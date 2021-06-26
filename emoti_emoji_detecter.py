@@ -25,9 +25,9 @@ def slice(word):
         if word[len(word)-1-i] in punc:
             continue
         else:
-            ind = word.index(word[len(word)-1-i])
+            ind = len(word)-1-i
             break
-    return word[:ind], word[ind:]
+    return [word[:ind+1], word[ind+1:]]
 
         
 
