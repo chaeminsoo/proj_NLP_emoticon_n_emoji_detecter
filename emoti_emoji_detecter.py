@@ -11,6 +11,7 @@ eng_dic={
     'well':[1]
     }
 emo_dic={':(':'sad'}
+punc=['.',',','!','?']
 anayl=[]
 
 word_sign = re.compile(r'\S+')
@@ -19,11 +20,15 @@ word_w_punc = re.compile(r'\S+[.]')
 result1 = word_sign.findall('I am sorry you are not feeling well. :(')
 result2 = word_w_punc.findall('I am sorry you are not feeling well. :(')
 
-w_p_slice=[]
+def slice(word):
+    for i in range(len(word)):
+        if word[len(word)-1-i] in punc:
+            continue
+        else:
+            ind = word.index(word[len(word)-1-i])
+            break
+    return word[:ind], word[ind:]
 
-if result2 == True:
-    for i in result2:
-        i.find('.')
         
 
 # result1 = word_sign.findall('I am sorry you are not feeling well... :(')
