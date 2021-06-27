@@ -12,16 +12,19 @@ eng_dic={
     'feeling':[1],
     'well':[1]
     }
+
 emo_dic={':(':'sad'}
+
 punc=['.',',','!','?']
 punc_dic={'.':'end',',':'punc','!':'exclamation mark','?':'question','...':'etc'}
 
+emoji_dic = {'\U0001F44F':'clap'}
 #---------------------------------------------------------------------------------------
 
 ### tokenization ###
 
 word_sign = re.compile(r'\S+')
-word_w_punc = re.compile(r'\S+[.]')
+word_w_punc = re.compile(r'\S+[.]|\S+[!]|\S+[,]|\S+[?]')
 
 def slice(word):
     for i in range(len(word)):
@@ -71,7 +74,11 @@ for element in result1:
                 if punc_dic[element]:
                     anayl.append(punc_dic[element])
             except KeyError:
-                anayl.append('not found')
+                try:
+                    if emoji_dic[element]:
+                        anayl.append(emoji_dic[element])
+                except KeyError:
+                    anayl.append('not found')
 
 #-----------------------------------------------------------------------------------
 
