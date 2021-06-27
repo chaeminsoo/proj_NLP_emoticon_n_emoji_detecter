@@ -1,5 +1,7 @@
 import re
 
+### dic ###
+
 eng_dic={
     'I':['NN', '1st', 'name that call myself'],
     'am':['VBP', '1st', 'be verb for I'],
@@ -12,13 +14,14 @@ eng_dic={
     }
 emo_dic={':(':'sad'}
 punc=['.',',','!','?']
-anayl=[]
+punc_dic={'.':'end',',':'punc','!':'exclamation mark','?':'question','...':'etc'}
+
+#---------------------------------------------------------------------------------------
+
+### tokenization ###
 
 word_sign = re.compile(r'\S+')
 word_w_punc = re.compile(r'\S+[.]')
-
-result1 = word_sign.findall('I am sorry you are not feeling well. :(')
-result2 = word_w_punc.findall('I am sorry you are not feeling well. :(')
 
 def slice(word):
     for i in range(len(word)):
@@ -29,13 +32,31 @@ def slice(word):
             break
     return [word[:ind+1], word[ind+1:]]
 
-        
+input_sent = input('Enter a sentence:')
+
+# result1 = word_sign.findall('I am sorry you are not feeling well. :(')
+# result2 = word_w_punc.findall('I am sorry you are not feeling well. :(')
 
 # result1 = word_sign.findall('I am sorry you are not feeling well... :(')
 # result2 = word_w_punc.findall('I am sorry you are not feeling well... :(')
 
-if result2[0] in result1:
-    result1[result1.index(result2[0])] 
+result1 = word_sign.findall(input_sent)
+result2 = word_w_punc.findall(input_sent)
+
+for i in result2:
+    if i in result1:
+        location = result1.index(i)
+        a = len(slice(result1[location]))
+        chaged = slice(result1[location])
+        result1[location:location+1] = chaged
+    else:
+        continue
+
+#----------------------------------------------------------------------------------------
+
+##### start analyse #####
+
+anayl=[]
 
 for element in result1:
     try:
@@ -46,7 +67,13 @@ for element in result1:
             if emo_dic[element]:
                 anayl.append(emo_dic[element])
         except KeyError:
-            anayl.append('not found')
+            try:
+                if punc_dic[element]:
+                    anayl.append(punc_dic[element])
+            except KeyError:
+                anayl.append('not found')
+
+#-----------------------------------------------------------------------------------
 
 print(result1)
 print(result2)
