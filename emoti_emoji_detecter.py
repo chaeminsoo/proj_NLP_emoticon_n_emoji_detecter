@@ -3,22 +3,86 @@ import re
 ### dic ###
 
 eng_dic={
-    'I':['NN', '1st', 'name that call myself'],
+    'I':['PRP', '1st', 'name that call myself'],
     'am':['VBP', '1st', 'be verb for I'],
     'sorry':['JJ'],
-    'you':[1],
-    'are':[1],
-    'not':[1],
-    'feeling':[1],
-    'well':[1]
+    'you':['NN', '2nd'],
+    'are':['VBP','2nd','be verb for you'],
+    'not':['JJ'],
+    'feeling':['VBG'],
+    'well':['RB'],
+
+    ##2nd sentence
+    'Well':['UH'], #interjection
+    'know':['VBP'],
+    'what':['WP'], 
+    'i':['NN', '1st', 'name that call myself'], 
+    'mean':['VBP'],
+
+    ##3rd sentence
+    'Congratulations':['UH'],
+    'done':['VBN'],
+
+    ##4th sentence
+    'for':['IN'],
+    'really':['RB'],
+    'have':['VBP'],
+    'Have':['VBP'],
+
+    ##5th sentence
+    'fun':['NN'],
+    'during':['IN'],
+    'your':['PRP$'], 
+    'lesson':['NN'],
+
+    ##6th sentence
+    'survived':['VBD'],
+    'everything':['NN'], 
+    'hurting':['VBG'],
+    'now':['RB'], 
+    'It':['PRP'],
+    'over':['IN'],
+    '4':['CD'], 
+    'hours':["NNS"],
+    'but':['CC'],
+    'is':['VBZ'],
+    'took':['VBD'],
+
+    ##7th sentence
+    'Auts':['UH'],
+    'be':['VB'],
+    'bet':['VBP'],
+    'that':['IN'],
+    'tomorrow':['RB'],
+    'will':['MD'], 
+    'a':['DT'],
+    'better':['JJR'], 
+    'day':['NN'],
+    
     }
 
-emo_dic={':(':'sad'}
+emo_dic={
+    ':(':['EMOTI','sad'],
+    ';)':['EMOTI','twinkle'] ##unicode 나와 있는 내용을 따랐습니다.
+    } 
 
 punc=['.',',','!','?']
-punc_dic={'.':'end',',':'punc','!':'exclamation mark','?':'question','...':'etc'}
+punc_dic={
+    '.':['PUNC','end'],
+    ',':['PUNC','punc'],
+    '!':['PUNC','exclamation mark'],
+    '?':['PUNC','question'],
+    '...':['PUNC','etc']
+    }
 
-emoji_dic = {'\U0001F44F':'clap'}
+emoji_dic = {
+    '\U0001F44F':['EMOJI','clap'],
+    '\U0001F648':['EMOJI','see-no-evil monkey'], ##unicode 나와 있는 내용을 따랐습니다.
+    '\U0001F3B7':['EMOJI','saxophone'],
+    '\U0001F631':['EMOJI','face screaming in fear'],
+    '\U0001F62B':['EMOJI','tired face'],
+    '\U0001F60D':['EMOJI','smiling face with heart-shaped eyes']
+}
 #---------------------------------------------------------------------------------------
 
 ### tokenization ###
@@ -37,12 +101,6 @@ def slice(word):
 
 input_sent = input('Enter a sentence:')
 
-# result1 = word_sign.findall('I am sorry you are not feeling well. :(')
-# result2 = word_w_punc.findall('I am sorry you are not feeling well. :(')
-
-# result1 = word_sign.findall('I am sorry you are not feeling well... :(')
-# result2 = word_w_punc.findall('I am sorry you are not feeling well... :(')
-
 result1 = word_sign.findall(input_sent)
 result2 = word_w_punc.findall(input_sent)
 
@@ -59,29 +117,28 @@ for i in result2:
 
 ##### start analyse #####
 
-anayl=[]
+tag=[]
 
 for element in result1:
     try:
         if eng_dic[element]:
-            anayl.append(eng_dic[element])
+            tag.append(eng_dic[element][0])
     except KeyError:
         try:
             if emo_dic[element]:
-                anayl.append(emo_dic[element])
+                tag.append(emo_dic[element][0])
         except KeyError:
             try:
                 if punc_dic[element]:
-                    anayl.append(punc_dic[element])
+                    tag.append(punc_dic[element][0])
             except KeyError:
                 try:
                     if emoji_dic[element]:
-                        anayl.append(emoji_dic[element])
+                        tag.append(emoji_dic[element][0])
                 except KeyError:
-                    anayl.append('not found')
+                    tag.append('not found')
 
 #-----------------------------------------------------------------------------------
 
-print(result1)
-print(result2)
-print(anayl)
+print('Tokenization:',result1)
+print('Tagging: ',tag)
