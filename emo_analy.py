@@ -13,7 +13,7 @@ eng_dic={
     'well':['RB'],
 
     ##2nd sentence
-    'Well':['UH'], #interjection
+    'Well':['RB'], #interjection
     'know':['VBP'],
     'what':['WP'], 
     'i':['NN', '1st', 'name that call myself'], 
@@ -68,11 +68,11 @@ emo_dic={
 
 punc=['.',',','!','?']
 punc_dic={
-    '.':['PUNC','end'],
-    ',':['PUNC','punc'],
-    '!':['PUNC','exclamation mark'],
-    '?':['PUNC','question'],
-    '...':['PUNC','etc']
+    '.':['.','end'],
+    ',':[',','punc'],
+    '!':['!','exclamation mark'],
+    '?':['?','question'],
+    '...':['...','etc']
     }
 
 emoji_dic = {
@@ -100,7 +100,7 @@ def slice(word):
     return [word[:ind+1], word[ind+1:]]
 
 #input_sent = input('Enter a sentence:')
-input_sent = 'I am sorry you are not feeling well. :('
+input_sent = 'Auts 😫 I bet that tomorrow will be a better day... 😍'
 
 result1 = word_sign.findall(input_sent)
 result2 = word_w_punc.findall(input_sent)
@@ -145,8 +145,9 @@ for element in result1:
 
 
 phrase_dic={
-    'NP':[('PRP',)],
-    'VP':[('VBP','JJ'),('VBG','RB')]
+    'NP':[('JJR','NN'),('WP','VP'),('DT','NP')],
+    'VP':[('VBP','JJ'),('VBG','RB'),('PRP','VBP'),('VBP','NP'),('NN','VP'),('RB','VP'),('RB','VBN'),('MD','VB')],
+    'S':[('UH','!'),('VP','!')]
     }
 
 def phrase(tags):
@@ -163,7 +164,7 @@ def phrase(tags):
             elif (now,nxt) in phrase_dic['NP']:
                 anal.insert(i,'NP')
                 ref_tags.pop(i)
-            elif (now,nxt) == (now,'VP'):
+            elif now != '!' and now != '.' and (now,nxt) == (now,'VP'):
                 anal.insert(i,'VP')
                 ref_tags.pop(i)
             else:
@@ -183,7 +184,16 @@ def semi_fini(tagg):
             now = ref_tags[i]
             nxt = ref_tags[i+1]
 
-            if (now,nxt) == ('VP','PUNC'):
+            if (now,nxt) == ('VP','.'):
+                anal.insert(i,'S')
+                ref_tags.pop(i)
+            elif (now,nxt) == ('VP','!'):
+                anal.insert(i,'S')
+                ref_tags.pop(i)
+            elif (now,nxt) == ('UH','!'):
+                anal.insert(i,'S')
+                ref_tags.pop(i)
+            elif (now,nxt) == ('VP','?'):
                 anal.insert(i,'S')
                 ref_tags.pop(i)
         except IndexError:
@@ -211,14 +221,31 @@ def fini(semi):
     return fin_result
 
 
+
+def re_phra(list):
+    aaa = phrase(list)
+    bbb = phrase(aaa)
+    resulta = True
+    if aaa == bbb:
+        smi = semi_fini(bbb)
+        resulta = fini(smi)        
+
+    elif aaa != bbb:
+        re_phra(bbb)
+        
+    return resulta
+    
+
 a = phrase(tag)
 b = phrase(a)
 c = phrase(b)
 d = phrase(c)
 e = phrase(d)
-f = semi_fini(e)
-g = fini(f)
+f = phrase(e)
+g = semi_fini(f)
+i = fini(g)
 
+h = re_phra(tag)
 
 
 
@@ -227,6 +254,12 @@ g = fini(f)
 #----------------------------------------------------------------------------------
 print('Tokenization:',result1)
 print('Tagging: ',tag)
+if h == True:
+    print('No Syntactic Error')
+else:
+    print('There is Syntactic Error')
+
+
 print('\n***Penn Treebank***\n')
 print(a)
 print(b)
@@ -235,3 +268,5 @@ print(d)
 print(e)
 print(f)
 print(g)
+print(i)
+print(h)
