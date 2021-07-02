@@ -99,7 +99,8 @@ def slice(word):
             break
     return [word[:ind+1], word[ind+1:]]
 
-input_sent = input('Enter a sentence:')
+#input_sent = input('Enter a sentence:')
+input_sent = 'I am sorry you are not feeling well. :('
 
 result1 = word_sign.findall(input_sent)
 result2 = word_w_punc.findall(input_sent)
@@ -174,8 +175,51 @@ def phrase(tags):
     
     return anal
 
+def semi_fini(tagg):
+    anal =[]
+    ref_tags = tagg[:]
+    for i in range(len(tagg)):
+        try: 
+            now = ref_tags[i]
+            nxt = ref_tags[i+1]
+
+            if (now,nxt) == ('VP','PUNC'):
+                anal.insert(i,'S')
+                ref_tags.pop(i)
+        except IndexError:
+            anal.insert(i,now)
+            break
+    
+    return anal
+
+def fini(semi):
+    fin_result = True
+    try:
+        while semi:
+            if semi.pop() == 'S':
+                continue
+            elif semi.pop() == 'EMOTI':
+                continue
+            elif semi.pop() == 'EMOJI':
+                continue
+            else:
+                fin_result = False
+                break
+    except IndexError:
+        return fin_result
+            
+    return fin_result
+
+
 a = phrase(tag)
 b = phrase(a)
+c = phrase(b)
+d = phrase(c)
+e = phrase(d)
+f = semi_fini(e)
+g = fini(f)
+
+
 
 
 
@@ -186,3 +230,8 @@ print('Tagging: ',tag)
 print('\n***Penn Treebank***\n')
 print(a)
 print(b)
+print(c)
+print(d)
+print(e)
+print(f)
+print(g)
