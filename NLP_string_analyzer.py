@@ -63,7 +63,7 @@ eng_dic={
 
 emo_dic={
     ':(':['EMOTI','sad'],
-    ';)':['EMOTI','twinkle'] ##unicode 나와 있는 내용을 따랐습니다.
+    ';)':['EMOTI','twinkle'] 
     } 
 
 punc=['.',',','!','?']
@@ -77,7 +77,7 @@ punc_dic={
 
 emoji_dic = {
     '\U0001F44F':['EMOJI','clap'],
-    '\U0001F648':['EMOJI','see-no-evil monkey'], ##unicode 나와 있는 내용을 따랐습니다.
+    '\U0001F648':['EMOJI','see-no-evil monkey'], 
     '\U0001F3B7':['EMOJI','saxophone'],
     '\U0001F631':['EMOJI','face screaming in fear'],
     '\U0001F62B':['EMOJI','tired face'],
@@ -100,7 +100,6 @@ def slice(word):
     return [word[:ind+1], word[ind+1:]]
 
 input_sent = input('Enter a sentence:')
-#input_sent = 'I am sorry you are not feeling well. :('
 
 result1 = word_sign.findall(input_sent)
 result2 = word_w_punc.findall(input_sent)
@@ -142,7 +141,6 @@ for element in result1:
 #-----------------------------------------------------------------------------------
 
 ### Penn treebank ###
-
 
 phrase_dic={
     'NP':[('JJR','NN'),('WP','VP'),('DT','NP'),('EMOJI','NN'),('PRP$','NP')],
@@ -224,8 +222,6 @@ def fini(semi):
             
     return fin_result
 
-
-
 def re_phra(list):
     aaa = phrase(list)
     bbb = phrase(aaa)
@@ -238,23 +234,8 @@ def re_phra(list):
         re_phra(bbb)
         
     return resulta
-    
-
-a = phrase(tag)
-b = phrase(a)
-c = phrase(b)
-d = phrase(c)
-e = phrase(d)
-f = phrase(e)
-g = semi_fini(f)
-i = fini(g)
 
 h = re_phra(tag)
-
-
-
-
-
 #----------------------------------------------------------------------------------
 print('Tokenization:',result1)
 print('Tagging: ',tag)
@@ -262,15 +243,3 @@ if h == True:
     print('No Syntactic Error')
 else:
     print('There is Syntactic Error')
-
-
-print('\n***Penn Treebank***\n')
-print(a)
-print(b)
-print(c)
-print(d)
-print(e)
-print(f)
-print(g)
-print(i)
-print(h)
